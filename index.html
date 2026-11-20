@@ -1,98 +1,136 @@
 
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Broken Heart</title>
-
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#050303;color:white;
- min-height:100vh;overflow:hidden;
- display:flex;align-items:center;justify-content:center;
- font-family:Arial,sans-serif;
+ margin:0;background:#030303;color:white;
+ overflow:hidden;font-family:Arial;
 }
 .scene{
- width:100%;height:100vh;position:relative;
+ height:100vh;width:100%;
+ position:relative;overflow:hidden;
  display:flex;align-items:center;justify-content:center;
- background:radial-gradient(ellipse,#260008,#080204 65%,#000);
- overflow:hidden;
+ background:radial-gradient(ellipse,#230008,#080204 65%,#000);
 }
-.glow{
- position:absolute;width:320px;height:320px;
- background:#d0003030;filter:blur(75px);
+.heart{
+ position:absolute;
+ width:min(92vw,470px);
+ height:min(65vh,470px);
+ top:50%;left:50%;
+ transform:translate(-50%,-50%);
+ filter:drop-shadow(0 0 18px #900019);
 }
-.art{
- position:absolute;width:100%;max-width:650px;
- display:flex;justify-content:center;
- top:50%;transform:translateY(-50%);
- animation:heartbeat .85s infinite;
- filter:drop-shadow(0 0 20px #a90025);
+.half{
+ position:absolute;inset:0;
+ width:100%;height:100%;
+ object-fit:contain;
 }
-.art img{
- width:100%;height:auto;display:block;
-}
-@keyframes heartbeat{
+.left{clip-path:inset(0 50% 0 0)}
+.right{clip-path:inset(0 0 0 50%)}
+
+.heart img{animation:beat .9s infinite}
+@keyframes beat{
  0%,100%{scale:1}
  45%{scale:1.035}
 }
-.art.stop{animation:none}
+.scene.hit .heart img{animation:none}
+
+.left,.right{
+ transition:transform 1.8s cubic-bezier(.2,.8,.2,1);
+}
+.scene.broken .left{
+ transform:translate(-85px,12px) rotate(-9deg);
+}
+.scene.broken .right{
+ transform:translate(85px,12px) rotate(9deg);
+}
+
+.arrow{
+ position:absolute;
+ left:-180px;
+ top:50%;
+ width:180px;height:38px;
+ z-index:8;
+ transform:translateY(-50%);
+ opacity:0;
+}
+.arrow svg{width:100%;height:100%}
+.scene.hit .arrow{
+ opacity:1;
+ animation:shoot 1.5s linear forwards;
+}
+@keyframes shoot{
+ from{left:-180px}
+ to{left:120vw}
+}
 
 .drop{
- position:absolute;top:65%;left:50%;
- width:11px;height:18px;border-radius:60% 40% 65% 65%;
- background:#c40022;box-shadow:0 0 10px red;
- opacity:0;z-index:5;
+ position:absolute;
+ top:48%;
+ left:50%;
+ width:12px;height:19px;
+ background:linear-gradient(135deg,#ff4b58,#8b0014);
+ border-radius:60% 40% 65% 65%;
+ opacity:0;z-index:9;
+ box-shadow:0 0 8px #f00;
 }
-.scene.hit .drop{animation:drip 1.5s infinite}
-.drop:nth-child(2){margin-left:-65px}
-.drop:nth-child(3){margin-left:45px;animation-delay:.4s!important}
-.drop:nth-child(4){margin-left:85px;animation-delay:.8s!important}
-.drop:nth-child(5){margin-left:-100px;animation-delay:1s!important}
-
+.scene.hit .drop{animation:drip 1.2s infinite}
+.drop:nth-child(2){margin-left:-25px}
+.drop:nth-child(3){margin-left:25px;animation-delay:.3s}
+.drop:nth-child(4){margin-left:50px;animation-delay:.6s}
+.drop:nth-child(5){margin-left:-50px;animation-delay:.8s}
 @keyframes drip{
- 0%{opacity:0;transform:translateY(-10px)}
+ 0%{opacity:0;transform:translateY(-5px)}
  20%{opacity:1}
- 100%{opacity:0;transform:translateY(150px) scale(.5)}
+ 100%{opacity:0;transform:translateY(130px) scale(.5)}
 }
 
-.message{
- position:absolute;bottom:13%;width:100%;
- text-align:center;padding:0 15px;
+.caption{
+ position:absolute;bottom:12%;
+ width:100%;text-align:center;
  opacity:0;transition:opacity 2s;
+ padding:15px;
  z-index:10;
 }
-.message h2{
- font-size:clamp(19px,5vw,27px);
- font-weight:normal;
- text-shadow:0 0 15px #e00035;
+.scene.broken .caption{opacity:1}
+.caption h2{
+ font-weight:normal;font-size:23px;
+ text-shadow:0 0 15px #d00032;
 }
-.message p{color:#aaa;font-size:13px}
+.caption p{font-size:13px;color:#aaa}
 
-.scene.hit .message{opacity:1}
-
-button{
- position:absolute;bottom:35px;z-index:20;
- background:#30000c;border:1px solid #a72a45;
- color:white;padding:12px 25px;
- border-radius:30px;font-size:15px;
- opacity:0;cursor:pointer;
+.replay{
+ position:absolute;bottom:25px;
+ background:#28000a;color:white;
+ border:1px solid #a52b45;
+ padding:12px 25px;border-radius:25px;
+ opacity:0;z-index:20;
 }
-.scene.hit button{opacity:1}
+.scene.broken .replay{opacity:1}
 </style>
 </head>
-
 <body>
+
 <div class="scene" id="scene">
 
-<div class="glow"></div>
+<div class="heart">
+<img class="half left"
+src="82E1EEAA-A925-40CA-8492-4111C5414E50.png">
+<img class="half right"
+src="82E1EEAA-A925-40CA-8492-4111C5414E50.png">
+</div>
 
-<div class="art" id="art">
-<img
- src="82E1EEAA-A925-40CA-8492-4111C5414E50.png"
- alt="Anatomical human heart pierced by an arrow">
+<div class="arrow">
+<svg viewBox="0 0 180 38">
+<path d="M0 13 L145 13 L145 1 L180 19 L145 37 L145 25 L0 25Z"
+fill="#d6d6dc" stroke="#777" stroke-width="1.5"/>
+<path d="M5 16 L145 16" stroke="white" stroke-width="2"/>
+</svg>
 </div>
 
 <div class="drop"></div>
@@ -100,31 +138,30 @@ button{
 <div class="drop"></div>
 <div class="drop"></div>
 
-<div class="message">
+<div class="caption">
 <h2>مو كل قلب ينكسر يرجع مثل قبل...</h2>
 <p>Some wounds never heal.</p>
 </div>
 
-<button onclick="replay()">إعادة المشهد ↻</button>
+<button class="replay" onclick="start()">إعادة المشهد ↻</button>
 
 </div>
 
 <script>
 const scene=document.getElementById("scene");
-const art=document.getElementById("art");
 
-function play(){
- scene.classList.remove("hit");
- art.classList.remove("stop");
+function start(){
+ scene.classList.remove("hit","broken");
 
  setTimeout(()=>{
-   art.classList.add("stop");
    scene.classList.add("hit");
- },3500);
-}
+ },3000);
 
-function replay(){play()}
-play();
+ setTimeout(()=>{
+   scene.classList.add("broken");
+ },4500);
+}
+start();
 </script>
 </body>
 </html>
